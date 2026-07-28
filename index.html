@@ -322,7 +322,8 @@ let STATIONS = SEED_STATIONS;
 // Load live data from SheetDB
 async function loadLiveStations() {
   try {
-    const response = await fetch('https://sheetdb.io/api/v1/9beicdobvw75k');
+    const response = await 
+  fetch('https://sheetdb.io/api/v1/9beicdobvw75k');
     if (!response.ok) throw new Error('SheetDB fetch failed');
     
     const data = await response.json();
