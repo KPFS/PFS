@@ -319,6 +319,29 @@ const STATION_DATA = {"meta": {"schemaVersion": "2.0", "source": "PFS locations 
 // SHEETS_CONFIG below is filled in, live sheet data takes over.
 const SEED_STATIONS = STATION_DATA.stations;
 let STATIONS = SEED_STATIONS;
+// Load live data from SheetDB
+async function loadLiveStations() {
+  try {
+    const response = await fetch('https://sheetdb.io/api/v1/9beicdobvw75k');
+    if (!response.ok) throw new Error('SheetDB fetch failed');
+    
+    const data = await response.json();
+    if (Array.isArray(data) && data.length > 0) {
+      STATIONS = data;
+      console.log('✅ Live from SheetDB:', data.length, 'stations');
+    }
+  } catch (error) {
+    console.error('SheetDB error:', error);
+    console.log('⚠️ Using built-in verified data');
+  }
+}
+
+// Load when page is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadLiveStations);
+} else {
+  loadLiveStations();
+}
 
 // ============ Google Sheets live data source ============
 // Fill these in to switch the app from the built-in seed data to your live Google Sheet:
